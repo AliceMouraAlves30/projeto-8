@@ -1,0 +1,51 @@
+# Análise de Comandos Kubectl
+
+Este projeto realiza uma análise dos comandos do kubectl com o objetivo de fornecer insights valiosos sobre sua utilização e distribuição. O kubectl é a ferramenta de linha de comando para interagir com clusters Kubernetes.
+
+## Estrutura do Projeto
+
+- `kubectl_analysis.ipynb`: Notebook Jupyter contendo o código para análise dos comandos kubectl.
+- `data/`: Diretório contendo os dados de entrada.
+- `outputs/`: Diretório contendo os gráficos gerados e relatórios de análise.
+
+## Requisitos
+
+- Python 3.x
+- Pandas
+- Matplotlib
+- Numpy
+
+## Instalação
+
+1. Clone o repositório:
+    ```sh
+    git clone https://github.com/seu-usuario/kubectl-analysis.git
+    cd kubectl-analysis
+    ```
+
+2. Crie um ambiente virtual e instale as dependências:
+    ```sh
+    python -m venv env
+    source env/bin/activate  # No Windows: env\Scripts\activate
+    pip install -r requirements.txt
+    ```
+
+## Utilização
+
+1. Certifique-se de que os dados estejam no formato adequado e localizados no diretório `data/`.
+2. Execute o notebook `kubectl_analysis.ipynb` para gerar os gráficos e relatórios.
+3. Os resultados serão salvos no diretório `outputs/`.
+
+## Gráficos Gerados
+
+1. **Contagem de Comandos por Objetivo**: Mostra a distribuição dos comandos com base nos objetivos principais.
+2. **Contagem de Comandos por Sintaxe**: Analisa a frequência de diferentes sintaxes de comandos.
+3. **Contagem de Comandos por Comandos com Bandeiras**: Foca nos comandos que utilizam bandeiras específicas.
+
+## Contribuição
+
+Contribuições são bem-vindas! Sinta-se à vontade para abrir issues ou pull requests.
+
+## Licença
+
+Este projeto está licenciado sob os termos da licença MIT. Veja o arquivo LICENSE para mais detalhes.
