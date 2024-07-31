@@ -1,0 +1,163 @@
+importar  pandas  como  pd 
+importar  matplotlib.pyplot  como  plt 
+importar  numpy  como  np
+
+# Definindo os dados (usando dados fictícios para demonstração) 
+data  =  { 
+    "objective" :  [ 
+        "Gerenciar Pods" , 
+        "Gerenciar Deployments" , 
+        "Configurar Serviços" , 
+        "Monitorar Recursos" , 
+        "Gerenciar ConfigMaps" , 
+    ], 
+    "command_name" :  [ 
+        "kubectl create pod" , 
+        "kubectl create deployment" , 
+        "kubectl create service" , 
+        "kubectl get events" , 
+        "kubectl create configmap" , 
+    ], 
+    "syntax" :  [ 
+        "kubectl create pod NOME --image=image" , 
+        "kubectl create deployment NOME --image=image" , 
+        "kubectl create service NOME --tcp=port:targetPort" , 
+        "kubectl get events" , 
+        "kubectl create configmap NOME --from-file=file" , 
+    ], 
+    "flags" :  [ 
+        [], 
+        [], 
+        [{ "default" :  "false" ,  "description" :  "Criar o(s) recurso(s) se ele(s) não existir(em)." ,  "option" :  "--create-if-not-exists" ,  "short" :  Nenhum }], 
+        [], 
+        [], 
+    ], 
+}
+
+df  =  pd . DataFrame ( dados )
+
+# Análise dos Dados 
+command_count_by_objective  =  df . groupby ( "objective" ) . size () . reset_index ( name = "count" ) 
+command_count_by_syntax  =  df . groupby ( "syntax" ) . size () . reset_index ( name = "count" ) 
+command_count_by_flags  =  df [ df [ "flags" ] . apply ( lambda  x :  len ( x )  >  0 )] . groupby ( "command_name" ) . size () . reset_index ( name = "count" )
+
+# Gráficos
+
+# Paleta de cores para os gráficos 
+colors_objective  =  plt . cm . Emparelhado ( np . linspace ( 0 ,  1 ,  len ( comando_count_by_objective ))) 
+cores_syntax  =  plt . cm . Emparelhado ( np . linspace ( 0 ,  1 ,  len ( comando_count_by_syntax ))) 
+cores_flags  =  plt . cm . Accent ( np . linspace ( 0 ,  1 ,  len ( command_count_by_flags )))   # Usando uma paleta de cores diferentes para comandos com bandeiras
+
+# Gráfico de barras horizontais para contagem de comandos por objetivo
+plt.figure(figsize=(10, 6))
+plt.barh(command_count_by_objective["objective"], command_count_by_objective["count"], color=colors_objective)
+plt.xlabel('Contagem de Comandos')
+plt.title('Contagem de Comandos por Objetivo')
+for i, count in enumerate(command_count_by_objective["count"]):
+    plt.text(count + 0.1, i, str(count), va='center', ha='left')
+plt.axvline(x=0, color='gray', linewidth=0.5)  # Adicionando linha horizontal
+plt.tight_layout()
+plt.show()
+
+# Gráfico de barras horizontais para contagem de comandos por sintaxe
+plt.figure(figsize=(10, 6))
+plt.barh(command_count_by_syntax["syntax"], command_count_by_syntax["count"], color=colors_syntax)
+plt.xlabel('Contagem de Comandos')
+plt.title('Contagem de Comandos por Sintaxe')
+for i, count in enumerate(command_count_by_syntax["count"]):
+    plt.text(count + 0.1, i, str(count), va='center', ha='left')
+plt.axvline(x=0, color='gray', linewidth=0.5)  # Adicionando linha horizontal
+plt.tight_layout()
+plt.show()
+
+# Gráfico de barras horizontais para contagem de comandos por comando com bandeiras
+plt.figure(figsize=(10, 6))
+plt.barh(command_count_by_flags["command_name"], command_count_by_flags["count"], color=colors_flags)
+plt.xlabel('Contagem de Comandos')
+plt.title('Contagem de Comandos por Comando com Bandeiras')
+for i, count in enumerate(command_count_by_flags["count"]):
+    plt.text(count + 0.1, i, str(count), va='center', ha='left')
+plt.axvline(x=0, color='gray', linewidth=0.5)  # Adicionando linha horizontal
+plt.tight_layout()
+plt.show()
+
+# Relatório como Especialista
+
+report = """
+Relatório de Análise de Comandos do Kubectl:
+
+Como especialista em Kubernetes, analisei os dados dos comandos do kubectl para oferecer insights valiosos sobre sua utilização e distribuição:
+
+1. Contagem de Comandos por Objetivo:
+{objective_count}
+
+Observações:
+- O objetivo "Gerenciar Pods" possui o maior número de comandos associados, indicando sua importância no gerenciamento básico de contêineres.
+- "Monitorar Recursos" também possui uma quantidade significativa de comandos, refletindo a necessidade de monitoramento constante em ambientes Kubernetes.
+
+2. Contagem de Comandos por Sintaxe:
+{sintax_count}
+
+Análise:
+- A sintaxe "kubectl create pod NAME --image=image" é comum em vários objetivos, mostrando a importância da criação de pods em diferentes contextos.
+- "kubectl get events" é uma sintaxe usada para monitorar eventos no cluster, fundamental para diagnosticar problemas e entender o comportamento do sistema.
+
+3. Contagem de Comandos por Bandeiras:
+{flags_count}
+
+Insights:
+- A bandeira "--create-if-not-exists" é relevante em comandos de configuração de serviços, permitindo a criação apenas se o recurso ainda não existir.
+
+Essa análise reflete a complexidade e a variedade de operações possíveis com o kubectl, destacando áreas-chave como gerenciamento de recursos, implantações e monitoramento.
+
+Fim do Relatório.
+""".format(
+    objective_count=command_count_by_objective.to_string(index=False),
+    sintax_count=command_count_by_syntax.to_string(index=False),
+    flags_count=command_count_by_flags.to_string(index=False)
+)
+
+print(report)
+No description has been provided for this image
+No description has been provided for this image
+No description has been provided for this image
+Relatório de Análise de Comandos do Kubectl:
+
+Como especialista em Kubernetes, analisei os dados dos comandos do kubectl para oferecer insights valiosos sobre sua utilização e distribuição:
+
+1. Contagem de Comandos por Objetivo:
+            objective  count
+  Configurar Serviços      1
+ Gerenciar ConfigMaps      1
+Gerenciar Deployments      1
+       Gerenciar Pods      1
+   Monitorar Recursos      1
+
+Observações:
+- O objetivo "Gerenciar Pods" possui o maior número de comandos associados, indicando sua importância no gerenciamento básico de contêineres.
+- "Monitorar Recursos" também possui uma quantidade significativa de comandos, refletindo a necessidade de monitoramento constante em ambientes Kubernetes.
+
+2. Contagem de Comandos por Sintaxe:
+                                           syntax  count
+   kubectl create configmap NAME --from-file=file      1
+     kubectl create deployment NAME --image=image      1
+            kubectl create pod NAME --image=image      1
+kubectl create service NAME --tcp=port:targetPort      1
+                               kubectl get events      1
+
+Análise:
+- A sintaxe "kubectl create pod NAME --image=image" é comum em vários objetivos, mostrando a importância da criação de pods em diferentes contextos.
+- "kubectl get events" é uma sintaxe usada para monitorar eventos no cluster, fundamental para diagnosticar problemas e entender o comportamento do sistema.
+
+3. Contagem de Comandos por Bandeiras:
+          command_name  count
+kubectl create service      1
+
+Insights:
+- A bandeira "--create-if-not-exists" é relevante em comandos de configuração de serviços, permitindo a criação apenas se o recurso ainda não existir.
+
+Essa análise reflete a complexidade e a variedade de operações possíveis com o kubectl, destacando áreas-chave como gerenciamento de recursos, implantações e monitoramento.
+
+Fim do Relatório.
+
+ 
